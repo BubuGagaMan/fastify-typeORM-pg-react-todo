@@ -1,4 +1,5 @@
 import fastify from "fastify";
+import { buildApp } from "./app.mjs";
 
 interface opts {
     logger?: {
@@ -15,18 +16,16 @@ if (process.stdout.isTTY) {
         transport: {
             target: 'pino-pretty'
         }
+        //level: 'info
     }
 } else {
     opts.logger = true
 }
 
-const app = fastify(opts);
+const app = await buildApp(opts)
 
-app.get("/ping", async (_request, _reply) => {
-  return "pong\n";
-});
 
-app.listen({ port: 3000, host: '0.0.0.0' }, (err, address) => {
+app.listen({ port: 3000, host: '0.0.0.0' }, (err, address: string) => {
     if(err) {
         console.error(err)
         process.exit(1)
