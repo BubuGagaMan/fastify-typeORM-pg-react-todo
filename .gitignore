@@ -1,2 +1,5 @@
-backend/node_modues/**
-frontend/node_modules
+backend/node_modues/
+backend/.env
+
+frontend/node_modules/
+frontend/.env
