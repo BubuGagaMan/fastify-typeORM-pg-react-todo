@@ -1,12 +1,13 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.jjs",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p tsconfig.json",
-    "start": "node index.js",
-    "start-no-pretty": "node index.js | less"
+    "start": "node ./dist/index.js",
+    "start-no-pretty": "node ./dist/index.js | less"
   },
   "keywords": [],
   "author": "",

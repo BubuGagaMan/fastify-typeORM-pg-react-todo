@@ -1,5 +1,5 @@
 import fastify from "fastify";
-import { buildApp } from "./app.mjs";
+import { buildApp } from "./app.js";
 
 interface opts {
     logger?: {
