@@ -1,47 +1,55 @@
-import closeWithGrace from 'close-with-grace'
+import closeWithGrace from "close-with-grace";
 import { buildApp } from "./app.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 interface opts {
-    logger?: {
+  logger?:
+    | {
         transport: {
-            target: string
-        }
-    } | boolean
+          target: string;
+        };
+      }
+    | boolean;
 }
 
-const opts: opts = {}
+const opts: opts = {};
 
 if (process.stdout.isTTY) {
-    opts.logger = {
-        transport: {
-            target: 'pino-pretty'
-        }
-        //level: 'info
-    }
+  opts.logger = {
+    transport: {
+      target: "pino-pretty",
+    },
+    //level: 'info
+  };
 } else {
-    opts.logger = true
+  opts.logger = true;
 }
 
-const app = await buildApp(opts)
+const app = await buildApp(opts);
 
-closeWithGrace(async ({signal, err, manual}) => {
-    if(err) {
-        app.log.error({err}, 'server closing with error')
-    } else {
-        app.log.info(`${signal} received, server closing`)
-    }
-    await app.close()
-})
+const port: number = Number(process.env.PORT) || 3000;
+const host = process.env.HOST || "0.0.0.0";
+
+closeWithGrace(async ({ signal, err, manual }) => {
+  if (err) {
+    app.log.error({ err }, "server closing with error");
+  } else {
+    app.log.info(`${signal} received, server closing`);
+  }
+  await app.close();
+});
 
 // error example
 // setTimeout(() => {
 //     throw new Error('test')
 // }, 1000)
 
-app.listen({ port: 3000, host: '0.0.0.0' }, (err, address: string) => {
-    if(err) {
-        console.error(err)
-        process.exit(1)
-    }
-    console.log(`Server listening at ${address}`)
+app.listen({ port, host }, (err, address: string) => {
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  }
+  console.log(`Server listening at ${address}`);
 });

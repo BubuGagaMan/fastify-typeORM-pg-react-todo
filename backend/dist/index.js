@@ -1,5 +1,7 @@
 import closeWithGrace from 'close-with-grace';
 import { buildApp } from "./app.js";
+import dotenv from 'dotenv';
+dotenv.config();
 const opts = {};
 if (process.stdout.isTTY) {
     opts.logger = {
@@ -13,6 +15,8 @@ else {
     opts.logger = true;
 }
 const app = await buildApp(opts);
+const port = Number(process.env.PORT) || 3000;
+const host = process.env.HOST || '0.0.0.0';
 closeWithGrace(async ({ signal, err, manual }) => {
     if (err) {
         app.log.error({ err }, 'server closing with error');
@@ -26,7 +30,7 @@ closeWithGrace(async ({ signal, err, manual }) => {
 // setTimeout(() => {
 //     throw new Error('test')
 // }, 1000)
-app.listen({ port: 3000, host: '0.0.0.0' }, (err, address) => {
+app.listen({ port, host }, (err, address) => {
     if (err) {
         console.error(err);
         process.exit(1);
