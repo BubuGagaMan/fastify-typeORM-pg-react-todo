@@ -1,6 +1,6 @@
 import fastify from "fastify";
 import { testErrorCode } from "./errors.js";
-import { request } from "node:http";
+import exampleRoute from "./routes/exampleRoute.js";
 
 export async function buildApp(opts = {}) {
   const app = fastify(opts);
@@ -10,6 +10,8 @@ export async function buildApp(opts = {}) {
   app.get("/exampleError", async (_response, _reply) => {
     throw new testErrorCode();
   });
+
+  app.register(exampleRoute)
 
   app.setErrorHandler(async function (error, request, reply) {
     request.log.error(error);
