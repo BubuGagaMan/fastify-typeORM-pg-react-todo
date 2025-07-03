@@ -1,14 +1,14 @@
-import { FastifyPluginAsync } from "fastify";
+
+import { FastifyInstance } from "fastify";
 import { ReplyDefault } from "fastify/types/utils.js";
 
-
-// @TODO - figure out the types for app, ops
 //@TODO - find out how to type the request/reply
-export default async function exampleRoute(app: any, opts: any) {
+export default async function exampleRoute(app: FastifyInstance) {
   app.get("/exampleRoute", async (_request: any, reply: ReplyDefault) => {
     return { data: "some data" };
   });
 
+  //@TODO - look at serialisation (~50 min) and type box
   const postSchema = {
     schema: {
         body: {
