@@ -1,5 +1,6 @@
 import fastify from "fastify";
 import { testErrorCode } from "./errors.js";
+import { request } from "node:http";
 
 export async function buildApp(opts = {}) {
   const app = fastify(opts);
@@ -15,5 +16,16 @@ export async function buildApp(opts = {}) {
     reply.status(error.statusCode || 500);
     reply.send({ error: error.message });
   });
+
+  // manually call the notfound error handler (can direct system to jump to this route)
+  app.get("/notfound", async (_request, reply) => {
+    reply.callNotFound();
+  });
+
+  app.setNotFoundHandler(async (request, reply) => {
+    reply.code(404);
+    return { error: "Not found" };
+  });
+
   return app;
 }
