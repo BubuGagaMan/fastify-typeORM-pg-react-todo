@@ -31,7 +31,6 @@ const create = async (
   const userRepo = req.server.db.getRepository(User);
   const { username, password, email } = req.body;
 
-  //@TODO - have to figure out a way to only accept requests with given body props and then can just do Object.assign(req.body)
   const user = {
     username,
     password,
