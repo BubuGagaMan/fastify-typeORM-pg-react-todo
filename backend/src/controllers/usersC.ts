@@ -1,4 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
+import { User } from "../db/entities/User.js";
 
 interface CreateUserBody {
   username: string;
@@ -9,7 +10,13 @@ interface CreateUserBody {
 type RequestWithIdParams = FastifyRequest<{ Params: { id: string } }>;
 
 const getAll = async (req: FastifyRequest, reply: FastifyReply) => {
-  return { allUsers: "all users" };
+  const userRepo = req.server.db.getRepository(User);
+
+  const users = await userRepo.find();
+
+  reply
+    .status(200)
+    .send({ message: "Successfully retrieved all users!", data: users });
 };
 
 const getById = async (req: RequestWithIdParams, reply: FastifyReply) => {
@@ -21,13 +28,18 @@ const create = async (
   req: FastifyRequest<{ Body: CreateUserBody }>,
   reply: FastifyReply
 ) => {
-  const { username, email, password } = req.body;
+  const userRepo = req.server.db.getRepository(User);
+  const { username, password, email } = req.body;
 
-  return {
+  //@TODO - have to figure out a way to only accept requests with given body props and then can just do Object.assign(req.body)
+  const user = {
     username,
-    email,
     password,
+    email,
   };
+  await userRepo.save(user);
+
+  reply.status(201).send({ message: "User created successfully!", data: user });
 };
 
 const updateById = async (
@@ -53,11 +65,9 @@ const deleteById = async (req: RequestWithIdParams, reply: FastifyReply) => {
 };
 
 export default {
-    getAll,
-    getById,
-    create,
-    updateById,
-    deleteById
-}
-
-
+  getAll,
+  getById,
+  create,
+  updateById,
+  deleteById,
+};
