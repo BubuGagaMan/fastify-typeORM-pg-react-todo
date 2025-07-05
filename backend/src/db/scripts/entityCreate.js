@@ -1,10 +1,10 @@
 import { execSync } from "child_process"
 
 /**
- * SCRIPT FOR GENERATING A MIGRATION
- * Run by using the npm script + the name of your migration as a parameter:
+ * SCRIPT FOR CREATING AN ENTITY BOILERPLATE
+ * Run by using the npm script + the name of your entity as a parameter:
  * 
- * npm run migration:generate name-of-migration
+ * npm run entity:create NameOfEntity
  */
 const name = process.argv[2];
 if (!name) {
