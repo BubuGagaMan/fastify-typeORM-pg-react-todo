@@ -1,9 +1,16 @@
 import fastify from "fastify";
 import { testErrorCode } from "./errors.js";
 import exampleRoute from "./routes/exampleRoute.js";
+import usersR from "./routes/usersR.js";
+
+import AppDataSource from "./db/data-source.js";
 
 export async function buildApp(opts = {}) {
   const app = fastify(opts);
+
+  await AppDataSource.initialize();
+  app.decorate("db", AppDataSource);
+
   app.get("/", async (_response, _reply) => {
     return { hello: "world" };
   });
@@ -11,7 +18,8 @@ export async function buildApp(opts = {}) {
     throw new testErrorCode();
   });
 
-  app.register(exampleRoute)
+  app.register(exampleRoute);
+  app.register(usersR);
 
   app.setErrorHandler(async function (error, request, reply) {
     request.log.error(error);

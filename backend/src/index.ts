@@ -38,6 +38,7 @@ closeWithGrace(async ({ signal, err, manual }) => {
   } else {
     app.log.info(`${signal} received, server closing`);
   }
+  await app.db.destroy()
   await app.close();
 });
 
