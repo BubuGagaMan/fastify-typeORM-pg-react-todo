@@ -12,9 +12,16 @@ interface opts {
         };
       }
     | boolean;
+    ajv?: any
 }
 
-const opts: opts = {};
+const opts: opts = {
+  // ajv: {
+  //   customOptions: {
+  //     removeAdditional: 'all'
+  //   },
+  // }
+};
 
 if (process.stdout.isTTY) {
   opts.logger = {
