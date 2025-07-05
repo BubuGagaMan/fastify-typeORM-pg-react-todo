@@ -16,7 +16,7 @@ const AppDataSource = new DataSource({
     User,
   ],
 
-  migrations: ["src/db/migrations/**/*.js"],
+  migrations: ["./dist/db//migrations/**/*.js"],
 });
 
 export default AppDataSource
